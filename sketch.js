@@ -8,9 +8,9 @@
 
 //States
 let brush = 0; 
-let gems = 1; 
-let mirror = 2; 
-let forge = 3; 
+let mirror = 1; 
+let forge = 2; 
+let gems = 3; 
 let stars = 4; 
 
 //Starting state
@@ -21,24 +21,31 @@ let scene = brush;
 let cleanLevel = 120; 
 let clean = false; 
 
-//scene2 = 
+//scene2 - gemstones 
+let gemstones = [];
+
 
 let skies = ['#C1E8FF', '#7DA0CA', "#5483B3", '#052659', '#021024']
 function setup() {
  // put setup code here
  createCanvas(800,800);
  rectMode(CENTER);
+
+  for (let index = 0; index < 20; index ++){
+    gemstones.push(new Gemstone(random(150,650), random(150,650)));
+    gemstones[index].display();
+}
 }
 
 function draw() {
   // put drawing code here
   if (scene == brush){
     scene1(); 
-  }else if (scene == gems){
+  }else if (scene == mirror){
     scene2();
-  } else if (scene == mirror){
-    scene3()
   } else if (scene == forge){
+    scene3()
+  } else if (scene == gems){
     scene4();
   } else if (scene == stars){
     scene5();
@@ -64,8 +71,9 @@ function scene1(){
   }
   if (cleanLevel >= 255){
     clean = true; 
-    for (let i = 0; i < 5; i++){
-    sparkle(random(width/2 - 100, width/2 + 100), random(height/2, height/2 + 80),random(40, 50));
+    for (let i = 0; i < 3; i++){
+    let s = new Star(random(width/2 - 200, width/2 + 200), random(height/2 +20, height/2 + 150), random(20, 50));
+    s.display(); // draws it immediately
   }
   }
   //toothBrush
@@ -75,33 +83,19 @@ function scene1(){
   rect(mouseX + 40, mouseY, 160,50);
 
 }
-//helper function
-function sparkle(x, y, size){
-  // four pointed sparkle coords 
-  // from up-right-down--left = (0,-50), (5,-5), (50,0), (5,5), (0,50), (-5,5)(-50,0)(-5,-5)(0,-50)
-  push(); 
-  translate(x,y);
-  stroke(180);
-  strokeWeight(2);
-  fill(255, random(200, 255));
-
-  beginShape();
-    vertex(0, -size); // start at top
-    bezierVertex(size*0.05, -size*0.3, size*0.7, -size*0.1, size, 0); // right
-    bezierVertex(size*0.7, size*0.1, size*0.05, size*0.3, 0, size);    // bottom
-    bezierVertex(-size*0.05, size*0.3, -size*0.7, size*0.1, -size, 0); // left
-    bezierVertex(-size*0.7, -size*0.1, -size*0.05, -size*0.3, 0, -size);// top
-  endShape(CLOSE);
-}
 // scene 2
 function scene2(){
-  background(skies[gems]);
-}
-function scene3(){
   background(skies[mirror]);
 }
-function scene4(){
+function scene3(){
   background(skies[forge]);
+}
+function scene4(){
+  background(skies[gems]);
+  for (let g of gemstones){
+    g.display();
+  }
+
 }
 function scene5(){
   background(skies[stars]);
@@ -112,18 +106,3 @@ function scene5(){
 function mousePressed(){
 scene = (scene + 1) % 5;
 }
-
-
-
-
-
-
-
-// doesnt work rn idk why 
-// function scene_change(){
-//   if (scene > stars) {
-//     emotion = brush;
-//   } else {
-//     scene++;
-//   }
-// }

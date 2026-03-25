@@ -74,7 +74,7 @@ class Star {
     this.opacity = this.baseOpacity;
 
     this.twinkleOffset = random(TWO_PI);
-    this.twinkleSpeed = random(0.02, 0.05);
+    this.twinkleSpeed = random(0.02, 0.10);
   }
 
   display() {
@@ -102,7 +102,7 @@ class Star {
     push();
     translate(this.x, this.y);
     noStroke();
-    fill(255, this.opacity * 0.25);
+    fill(255, this.opacity * 0.10);
     ellipse(0, 0, this.size * 2);
     pop();
   }

@@ -177,21 +177,19 @@ function scene3(){
   }
 }
 function scene4() {
-  // 🌌 Gradient sky from sunset to night
   let skyStart = color(sunset[0]);
   let skyEnd = color(skies[4]);
   let skyColor = lerpColor(skyStart, skyEnd, skyT);
   background(skyColor);
 
-  // 🌞 Add current sun position to trail
+
   sunTrail.push({ y: sunY, auraLevel: auraLevel });
 
-  // Limit trail length for smooth following
   if (sunTrail.length > 30) { // last 30 frames
     sunTrail.shift();
   }
 
-  // Draw the sun trail (older = more transparent, smaller)
+
   for (let i = 0; i < sunTrail.length; i++) {
     let trail = sunTrail[i];
     let alpha = map(i, 0, sunTrail.length, 10, 80); // older = more transparent
@@ -203,12 +201,10 @@ function scene4() {
     ellipse(width/2, trail.y, size, size);
   }
 
-  // 🌞 Main sun
+  //sun
   fill('#F7C85C');
   noStroke();
   ellipse(width/2, sunY, 500, 500);
-
-  // 🌝 Face follows sun
   face.y = sunY;
   face.display();
   face.close();
@@ -217,7 +213,7 @@ function scene4() {
     return;
   }
 
-  // 🌇 Aura around sun
+  // sunset
   let c1 = color(sunset[auraIndex]);
   let c2 = color(sunset[max(auraIndex - 1, 0)]);
   let current = lerpColor(c1, c2, auraT);
@@ -236,7 +232,7 @@ function scene4() {
     if (auraIndex < 0) auraIndex = 0;
   }
 
-  // 🌅 Sun drops
+ // sun drops 
   if (auraIndex === 0) {
     sunY += 3;
 
@@ -246,7 +242,7 @@ function scene4() {
   }
 
   // 🎬 Transition to stars
-  if (sunY > height + 700) {
+  if (sunY > height*2 + 200) {
     state = stars;
   }
 }

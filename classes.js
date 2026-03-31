@@ -1,11 +1,9 @@
-
-// classes 
+//classes ---
 class Face {
   constructor(x, y, size){
     this.x = x;
     this.y = y;
     this.size = size;
-
     this.eyeW = 0;
     this.eyeH = 0;
     this.mouthW = 0;
@@ -16,15 +14,14 @@ class Face {
     fill(247, 200, 92);
     noStroke();
     ellipse(this.x, this.y, this.size, this.size);
-
+    // eyes
     fill(255);
     ellipse(this.x - 100, this.y - 80, this.eyeW, this.eyeH);
     ellipse(this.x + 100, this.y - 80, this.eyeW, this.eyeH);
-
     fill(0);
     ellipse(this.x - 100, this.y - 80, this.eyeW/2, this.eyeH/2);
     ellipse(this.x + 100, this.y - 80, this.eyeW/2, this.eyeH/2);
-
+    // mouth
     fill(cleanLevel);
     stroke(cleanLevel);
     strokeWeight(5);
@@ -53,26 +50,18 @@ class Face {
     }
   }
 
-  isOpenComplete(){
-    return this.eyeW >= 150 && this.eyeH >= 150 &&
-           this.mouthW >= 350 && this.mouthH >= 300;
-  }
-
-  isClosedComplete(){
-    return this.eyeW <= 0 && this.eyeH <= 0 &&
-           this.mouthW <= 0 && this.mouthH <= 0;
-  }
+  isOpenComplete(){return this.eyeW >= 150 && this.eyeH >= 150 && this.mouthW >= 350 && this.mouthH >= 300;}
+  isClosedComplete(){return this.eyeW <= 0 && this.eyeH <= 0 && this.mouthW <= 0 && this.mouthH <= 0;}
 }
 
 class Star {
-  constructor(x, y, size) {
+  constructor(x, y, size, col = color(255)) {
     this.x = x;
     this.y = y;
     this.size = size;
-
+    this.col = col; 
     this.baseOpacity = random(150, 255);
     this.opacity = this.baseOpacity;
-
     this.twinkleOffset = random(TWO_PI);
     this.twinkleSpeed = random(0.02, 0.10);
   }
@@ -80,11 +69,9 @@ class Star {
   display() {
     push();
     translate(this.x, this.y);
-
-    stroke(180);
+    stroke(180, this.opacity * 0.5);
     strokeWeight(2);
-    fill(255, this.opacity);
-
+    fill(this.col, this.opacity);
     beginShape();
     vertex(0, -this.size);
     bezierVertex(this.size*0.05, -this.size*0.3, this.size*0.7, -this.size*0.1, this.size, 0);
@@ -92,18 +79,22 @@ class Star {
     bezierVertex(-this.size*0.05, this.size*0.3, -this.size*0.7, this.size*0.1, -this.size, 0);
     bezierVertex(-this.size*0.7, -this.size*0.1, -this.size*0.05, -this.size*0.3, 0, -this.size);
     endShape(CLOSE);
-
     pop();
   }
 
-  glow(){
-    this.opacity = this.baseOpacity + sin(frameCount * this.twinkleSpeed + this.twinkleOffset) * 80;
+  glow() {
+    let t = frameCount * this.twinkleSpeed + this.twinkleOffset;
+    let twinkle = sin(t);
+    let sharp = pow(abs(twinkle), 2.5) * (twinkle > 0 ? 1 : -1);
+    this.opacity = this.baseOpacity + sharp * 80;
 
     push();
     translate(this.x, this.y);
     noStroke();
-    fill(255, this.opacity * 0.10);
-    ellipse(0, 0, this.size * 2);
+    fill(255, this.opacity * 0.1);
+    ellipse(0, 0, this.size * 2.2);
+    fill(255, this.opacity * 0.15);
+    ellipse(0, 0, this.size * 1.4);
     pop();
   }
 }
